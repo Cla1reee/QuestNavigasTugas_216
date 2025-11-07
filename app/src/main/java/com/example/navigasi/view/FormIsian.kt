@@ -1,4 +1,4 @@
-package com.example.Navigasi.view
+package com.example.navigasi.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -134,7 +134,7 @@ fun FormulirPendaftaran(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                onClick = { /* TODO: Handle a submissão dos dados */ },
+                onClick = { },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
