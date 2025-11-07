@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -24,31 +28,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.navigasi.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TampilanData(
     items: List<Pair<String, String>> = emptyList(),
     onBackBtnClick: () -> Unit = {}
 ) {
     Scaffold(
-        modifier = Modifier,
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.tampil), color = Color.White) },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = colorResource(id = R.color.teal_700)
                 )
             )
         }
-    ) { isiRuang ->
+    ) { contentPadding ->
         Column(
-            modifier = Modifier.padding(paddingValues = isiRuang),
-            verticalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                .padding(contentPadding)
+                .padding(dimensionResource(id = R.dimen.padding_medium))
         ) {
-            Column(
-                modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_medium)),
-                verticalArrangement = Arrangement.spacedBy(space = dimensionResource(id = R.dimen.padding_small))
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
             ) {
-                items.forEach { item ->
+                items(items) { item ->
                     Column {
                         Text(
                             text = item.first.uppercase(),
@@ -61,10 +66,10 @@ fun TampilanData(
                             fontSize = 22.sp
                         )
                     }
-                    HorizontalDivider(thickness = 1.dp, color = Color.Cyan)
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
                 }
             }
-            Spacer(modifier = Modifier.height(height = 10.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onBackBtnClick
