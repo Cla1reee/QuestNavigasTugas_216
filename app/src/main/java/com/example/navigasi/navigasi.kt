@@ -4,14 +4,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.navigasi.view.FormIsian
-import com.example.navigasi.view.TampilanData
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.navigasi.view.BerandaScreen
+import com.example.navigasi.view.FormulirPendaftaran
+import com.example.navigasi.view.TampilanData
 
 enum class Navigasi {
+    Beranda,
     Formulir,
     Detail
 }
@@ -20,32 +22,38 @@ enum class Navigasi {
 fun DataApp(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
-){
+) {
     Scaffold { isiRuang ->
         NavHost(
             navController = navController,
-            startDestination = Navigasi.Formulir.name,
-
-            modifier= Modifier.padding( paddingValues = isiRuang)
+            startDestination = Navigasi.Beranda.name,
+            modifier = Modifier.padding(paddingValues = isiRuang)
         ) {
+            composable(route = Navigasi.Beranda.name) {
+                BerandaScreen(
+                    onSubmitButtonClicked = {
+                        navController.navigate(route = Navigasi.Formulir.name)
+                    }
+                )
+            }
             composable(route = Navigasi.Formulir.name) {
-                FormIsian(
-                    onSubmitBtnClick = {
-                        navController.navigate(route = Navigasi.Detail.name)
+                FormulirPendaftaran(
+                    onSubmitButtonClicked = {
+                        navController.navigate(Navigasi.Detail.name)
+                    },
+                    onBackButtonClicked = {
+                        navController.popBackStack()
                     }
                 )
             }
             composable(route = Navigasi.Detail.name) {
                 TampilanData(
-                    onBackBtnClick = { cancelAndBackToFormulir(navController) }
+                    onBackToBerandaClick = { 
+                        navController.popBackStack(Navigasi.Beranda.name, inclusive = false)
+                     },
+                    onBackToFormClick = { navController.popBackStack() }
                 )
             }
         }
     }
-}
-
-private fun cancelAndBackToFormulir(
-    navController: NavHostController
-){
-    navController.popBackStack(route = Navigasi.Formulir.name, inclusive = false)
 }
